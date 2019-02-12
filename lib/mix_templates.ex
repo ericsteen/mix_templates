@@ -22,12 +22,12 @@ defmodule MixTemplates do
 
   ~~~elixir
   defmodule <%= @project_name_camel_case %>.Mixfile do
-    use Mix.Project
+  	use Mix.Project
 
-    @name    :<%= @project_name %>
-    @version "0.1.0"
+  	@name    :<%= @project_name %>
+  	@version "0.1.0"
 
-    . . .
+  	. . .
   ~~~
 
 
@@ -39,63 +39,63 @@ defmodule MixTemplates do
 
   Thus the directory structure for a standard Elixir project might be:
 
-      template
-      ├── $PROJECT_NAME$
-      │   ├── README.md
-      │   ├── config
-      │   │   └── config.exs
-      │   ├── lib
-      │   │   └── $PROJECT_NAME$.ex
-      │   ├── mix.exs
-      │   └── test
-      │       ├── $PROJECT_NAME$_test.exs
-      │       └── test_helper.exs
-      └── templates_project.ex
+  		template
+  		├── $PROJECT_NAME$
+  		│   ├── README.md
+  		│   ├── config
+  		│   │   └── config.exs
+  		│   ├── lib
+  		│   │   └── $PROJECT_NAME$.ex
+  		│   ├── mix.exs
+  		│   └── test
+  		│       ├── $PROJECT_NAME$_test.exs
+  		│       └── test_helper.exs
+  		└── templates_project.ex
 
   ## Write a Template
 
   Make sure you have the underlying tools installed:
 
-      $ mix archive.install hex mix_templates
-      $ mix archive.install hex mix_generator
+  		$ mix archive.install hex mix_templates
+  		$ mix archive.install hex mix_generator
 
   Then install the template for templates (yup :).
 
-      $ mix template.install hex gen_template_template
+  		$ mix template.install hex gen_template_template
 
   Now create your template project:
 
-      $ mix gen template my_template
+  		$ mix gen template my_template
 
   Wander into the directory that is created:
 
-      $ cd my_template/
-      $ tree
-      .
-      ├── README.md
-      ├── lib
-      │   └── my_template.ex
-      ├── mix.exs
-      └── template
-          └── $PROJECT_NAME$
-              └── your_project_tree_goes_here
+  		$ cd my_template/
+  		$ tree
+  		.
+  		├── README.md
+  		├── lib
+  		│   └── my_template.ex
+  		├── mix.exs
+  		└── template
+  				└── $PROJECT_NAME$
+  						└── your_project_tree_goes_here
 
   #### Add a Description
 
   Your first job is to update the metadata in lib/«whatever».ex:
 
-      defmodule MyTemplate do
+  		defmodule MyTemplate do
 
-        @moduledoc File.read!(Path.join([__DIR__, "../README.md"]))
+  			@moduledoc File.read!(Path.join([__DIR__, "../README.md"]))
 
-        use MixTemplates,
-          name:       :my_template,
-          short_desc: "Template for ....",
-          source_dir: "../template",
-          based_on:   :another_project,
-          options:    [ command line options unique to this template ]
+  			use MixTemplates,
+  				name:       :my_template,
+  				short_desc: "Template for ....",
+  				source_dir: "../template",
+  				based_on:   :another_project,
+  				options:    [ command line options unique to this template ]
 
-      end
+  		end
 
   For a simple template, the only change you're likely to make to the
   metadata is to update the short description. This is used to display
@@ -113,39 +113,39 @@ defmodule MixTemplates do
   tree you want your users to produce locally when they run `mix gen`.
 
   * The easiest way to start is with an existing project that uses the
-    same layout. Copy it into your template under
-    `template/$PROJECT_NAME$`.
+  	same layout. Copy it into your template under
+  	`template/$PROJECT_NAME$`.
 
   * Remove any files that aren't part of every project.
 
   * Look for files and directories whose names include the name of the
-    project. Rename these, replacing the project name with the string
-    $PROJECT_NAME$. For example, if you're following the normal
-    convention for test files, you'll have a file called
+  	project. Rename these, replacing the project name with the string
+  	$PROJECT_NAME$. For example, if you're following the normal
+  	convention for test files, you'll have a file called
 
-          test/myapp_test.exs
+  				test/myapp_test.exs
 
-    Rename this file to
+  	Rename this file to
 
-          test/$PROJECT_NAME$.exs
+  				test/$PROJECT_NAME$.exs
 
   * Now you need to look through the files for content that should be
-    customized to each new project that's generated. Replace this
-    content using EEx substitutions:
+  	customized to each new project that's generated. Replace this
+  	content using EEx substitutions:
 
-    For example, the top-level application might be an Elixir file:
+  	For example, the top-level application might be an Elixir file:
 
-          defmodule MyApp do
-            # . . .
-          end
+  				defmodule MyApp do
+  					# . . .
+  				end
 
-    Replace this with
+  	Replace this with
 
-          defmodule <%= project_name_camel_case %> do
-            # . . .
-          end
+  				defmodule <%= project_name_camel_case %> do
+  					# . . .
+  				end
 
-    There's a list of the available values in the next section.
+  	There's a list of the available values in the next section.
 
   ### Test Your Template
 
@@ -154,7 +154,7 @@ defmodule MixTemplates do
   (the top level, with `mix.exs` in it). This path must start with a dot
   (".") or slash ("/").
 
-          $ mix gen ../work/my_generator test_project
+  				$ mix gen ../work/my_generator test_project
 
   ### Publish Your Template
 
@@ -162,7 +162,7 @@ defmodule MixTemplates do
   update the `@description`, `@maintainers`, and `@github` attributes.
   Then publish to hex:
 
-          $ mix hex.publish
+  				$ mix hex.publish
 
 
   and wait for the praise.
@@ -178,8 +178,8 @@ defmodule MixTemplates do
 
   Assuming the template was invoked with a project name of my_app:
 
-      @project_name               my_app
-      @project_name_camel_case    MyApp
+  		@project_name               my_app
+  		@project_name_camel_case    MyApp
 
 
   #### Date and Time
@@ -187,35 +187,35 @@ defmodule MixTemplates do
   These examples are from my computer in US Central Daylight Time
   (GMT-5)
 
-      @now.utc.date               "2017-04-11"
-      @now.utc.time               "00:49:37.505034"
-      @now.utc.datetime           "2017-04-11T00:49:37.505034Z"
+  		@now.utc.date               "2017-04-11"
+  		@now.utc.time               "00:49:37.505034"
+  		@now.utc.datetime           "2017-04-11T00:49:37.505034Z"
 
-      @now.local.date             "2017-04-10"
-      @now.local.time             "19:49:37"
-      @now.local.datetime         "2017-04-10 19:49:37"
+  		@now.local.date             "2017-04-10"
+  		@now.local.time             "19:49:37"
+  		@now.local.datetime         "2017-04-10 19:49:37"
 
 
   #### The Environment
 
-      @host_os                    "os-name" or "os-name (variant)" eg: "unix (darwin)"
-      @original_args              the original args passed to mix
+  		@host_os                    "os-name" or "os-name (variant)" eg: "unix (darwin)"
+  		@original_args              the original args passed to mix
 
-      @elixir_version             eg: "1.5.3"
-      @erlang_version             eg: "8.2"
-      @otp_release                eg: "19"
+  		@elixir_version             eg: "1.5.3"
+  		@erlang_version             eg: "8.2"
+  		@otp_release                eg: "19"
 
-      @in_umbrella?               true if we're in the apps_path directory of an
-                                  umbrella project
+  		@in_umbrella?               true if we're in the apps_path directory of an
+  																umbrella project
 
   #### Stuff About the Template
 
 
-      @template_module            the module containing your template metadata
-      @template_name              the name of the template (from the metadata)
+  		@template_module            the module containing your template metadata
+  		@template_name              the name of the template (from the metadata)
 
-      @target_dir                 the project directory is created in this
-      @target_subdir              the project directory is called this
+  		@target_dir                 the project directory is created in this
+  		@target_subdir              the project directory is called this
 
 
   ### Handling Command Line Parameters
@@ -225,7 +225,7 @@ defmodule MixTemplates do
   `project` template lets you generate basic and supervised apps. To
   indicate you want the latter, you add a command line flag:
 
-          $ mix gen project my_app --supervised
+  				$ mix gen project my_app --supervised
 
   This option is not handled by the `gen` task. Instead, it passes it to
   your template module (the file in your top-level `lib/`). You can
@@ -234,16 +234,16 @@ defmodule MixTemplates do
   ~~~ elixir
   defmodule MyTemplate do
 
-    @moduledoc File.read!(Path.join([__DIR__, "../README.md"]))
+  	@moduledoc File.read!(Path.join([__DIR__, "../README.md"]))
 
-    use MixTemplates,
-      name:       :my_template,
-      short_desc: "Template for ....",
-      source_dir: "../template"
-      options:    [
-          supervised: [ to: :is_supervised?, default: false ],
-          sup:        [ same_as: :supervised ],
-      ]
+  	use MixTemplates,
+  		name:       :my_template,
+  		short_desc: "Template for ....",
+  		source_dir: "../template"
+  		options:    [
+  				supervised: [ to: :is_supervised?, default: false ],
+  				sup:        [ same_as: :supervised ],
+  		]
   end
   ~~~
 
@@ -277,8 +277,8 @@ defmodule MixTemplates do
 
   ~~~ elixir
   name:  [
-    takes:    "your-name",
-    required: true
+  	takes:    "your-name",
+  	required: true
   ]
   ~~~
 
@@ -287,8 +287,8 @@ defmodule MixTemplates do
 
   ~~~ elixir
   name:  [
-    takes:   "your-name",
-    default: "nancy"
+  	takes:   "your-name",
+  	default: "nancy"
   ]
   ~~~
 
@@ -300,15 +300,15 @@ defmodule MixTemplates do
 
   ~~~ elixir
   name:  [
-    takes:   "your-name",
-    to:      :basic_id,
-    default: "nancy"
+  	takes:   "your-name",
+  	to:      :basic_id,
+  	default: "nancy"
   ]
   ~~~
 
   In this example, calling
 
-       $ mix gen my_template my_app --name walter
+  		 $ mix gen my_template my_app --name walter
 
   will create an assigns map that includes `\@basic_id` with a value of “walter.”
 
@@ -320,8 +320,8 @@ defmodule MixTemplates do
 
   ~~~ elixir
   options:    [
-      supervised: [ to: :is_supervised?, default: false ],
-      sup:        [ same_as: :supervised ],
+  		supervised: [ to: :is_supervised?, default: false ],
+  		sup:        [ same_as: :supervised ],
   ]
   ~~~
 
@@ -334,23 +334,23 @@ defmodule MixTemplates do
 
   * `MixTemplates.ignore_file_and_directory_unless(«condition»)`
 
-    Include this in a template, and the template and it's immediate directory
-    will not be generated in the output unless the condition is true.
+  	Include this in a template, and the template and it's immediate directory
+  	will not be generated in the output unless the condition is true.
 
-    For example, in a new mix project, we only generate
-    `lib/«name»/application.ex` if we're creating a supervised app. The
-    `application.ex` template includes the following:
+  	For example, in a new mix project, we only generate
+  	`lib/«name»/application.ex` if we're creating a supervised app. The
+  	`application.ex` template includes the following:
 
-      ~~~ elixir
-      <%
-      #   ------------------------------------------------------------
-          MixTemplates.ignore_file_and_directory_unless \@is_supervisor?
-      #   ------------------------------------------------------------
-      %>
-      defmodule <%= \@project_name_camel_case %>.Application do
-         # ...
-      end
-      ~~~
+  		~~~ elixir
+  		<%
+  		#   ------------------------------------------------------------
+  				MixTemplates.ignore_file_and_directory_unless \@is_supervisor?
+  		#   ------------------------------------------------------------
+  		%>
+  		defmodule <%= \@project_name_camel_case %>.Application do
+  			 # ...
+  		end
+  		~~~
 
   Sometimes you just need to skip a single file if some condition is true. Use this helper:
 
@@ -365,14 +365,14 @@ defmodule MixTemplates do
 
   ~~~ elixir
   def clean_up(assigns) do
-    # ...
+  	# ...
   end
   ~~~
 
   The cleanup function is invoked in the directory where the project is
   created (and not inside the project itself). Thus if you invoke
 
-      mix gen my_template chat_server
+  		mix gen my_template chat_server
 
   in the directory `/Projects` (which will create
   `/Projects/chat_server`), the `clean_up` function's cwd will be
@@ -389,17 +389,17 @@ defmodule MixTemplates do
   ~~~ elixir
   defmodule MyTemplate do
 
-    \@moduledoc File.read!(Path.join([__DIR__, "../README.md"]))
+  	\@moduledoc File.read!(Path.join([__DIR__, "../README.md"]))
 
-    use MixTemplates,
-      name:       :my_template,
-      short_desc: "Template for ....",
-      source_dir: "../template",
-      based_on:   :project
+  	use MixTemplates,
+  		name:       :my_template,
+  		short_desc: "Template for ....",
+  		source_dir: "../template",
+  		based_on:   :project
 
-    def populate_assigns(assigns, options) do
-      # ...
-    end
+  	def populate_assigns(assigns, options) do
+  		# ...
+  	end
   end
   ~~~
 
@@ -423,8 +423,8 @@ defmodule MixTemplates do
 
   ~~~ elixir
   def clean_up(assigns) do
-    Path.join([assigns.target_subdir, "lib", "#{assigns.project_name}.ex"]))
-    |>  File.rm
+  	Path.join([assigns.target_subdir, "lib", "#{assigns.project_name}.ex"]))
+  	|>  File.rm
   end
   ~~~
 
@@ -489,6 +489,13 @@ defmodule MixTemplates do
       """
       def options do
         unquote(opts[:options] || [])
+      end
+
+      @doc """
+      Return the meta configuration supported by this template.
+      """
+      def meta_config do
+        unquote(opts[:meta_config] || [])
       end
 
       @doc """
@@ -663,7 +670,6 @@ defmodule MixTemplates do
               |> String.downcase()
               |> String.to_atom()
 
-            IO.inspect([name, nm, assign, assigns])
             String.replace(name, name, assigns[:assigns][assign])
           end
         else
