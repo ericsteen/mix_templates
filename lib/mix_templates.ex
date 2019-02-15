@@ -508,6 +508,7 @@ defmodule MixTemplates do
         nil
       end
 
+      defoverridable options: 0
       defoverridable clean_up: 1
     end
   end
